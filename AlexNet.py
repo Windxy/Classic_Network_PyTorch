@@ -2,7 +2,7 @@ import torch
 from torch import nn
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-'''2.AlexNet'''
+'''AlexNet'''
 class AlexNet(nn.Module):
     def __init__(self):
         super(AlexNet,self).__init__()
