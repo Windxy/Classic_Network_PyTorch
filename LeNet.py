@@ -1,6 +1,6 @@
 import torch
 from torch import nn
-from torchstat import stat
+# from torchstat import stat
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 '''LeNet的结构比较简单，2次重复的卷积激活池化后接3个全连接层，卷积核大小为5 * 5，池化窗口大小为2 * 2，步幅为2'''
@@ -33,7 +33,7 @@ class LeNet(nn.Module):
             nn.Sigmoid(),
             nn.Linear(84, 10),
         )
-        # 在forward()中，在输入全连接层之前，要先feature.view(img.shape[0],-1)做一次reshape
+    # 在forward()中，在输入全连接层之前，要先feature.view(img.shape[0],-1)做一次reshape
     def forward(self,x):
         feature = self.conv(x)
         out = self.fc(feature.view(x.shape[0],-1))    # 4张图片一批，img.shape[0]为4，第二个就是对应的概率
@@ -42,6 +42,6 @@ class LeNet(nn.Module):
 # 构建网络
 if __name__ == '__main__':
     net = LeNet()
-    stat(net,(1,32,32))
+    # stat(net,(1,32,32))
     X = torch.rand(1, 1, 32, 32)
     print(net(X).shape)
