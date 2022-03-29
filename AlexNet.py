@@ -7,7 +7,7 @@ class AlexNet(nn.Module):
     def __init__(self):
         super(AlexNet,self).__init__()
         self.conv = nn.Sequential(
-            # 输入图片大小为3*227*227,size为2274*227，通道数为3，RGB型图片
+            # 输入图片大小为3*227*227,size为227*227，通道数为3，RGB型图片
             nn.Conv2d(in_channels=3,out_channels=96,kernel_size=11,stride=4,padding=2), # 11 * 11 Conv(96),stride 4
             # in_channels=3因为图片类型是RGB型，所以通道数是3
             # out_channels=96表示输出的通道数，设定输出通道数的96（可以按自己需求调整）
