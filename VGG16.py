@@ -1,51 +1,60 @@
 import torch
 from torch import nn
-from torchvision import models
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-
-# vgg的block
-def vgg_block(num_convs,in_channels,out_channels):
-    blk = []
-    for i in range(num_convs):
-        if i == 0 :
-            blk.append(nn.Conv2d(in_channels,out_channels,3,1,padding=1))
-        else:
-            blk.append(nn.Conv2d(out_channels,out_channels,3,1,padding=1))
-        blk.append(nn.ReLU())   # 每个卷积层后借一个ReLU
-    blk.append(nn.MaxPool2d(2,2))   # 每一个block最后接一个maxpool
-    return nn.Sequential(*blk)
-
-class vgg(nn.Module):
-    def __init__(self,conv_arch,vgg_fc):
-        super(vgg,self).__init__()
-        self.net = nn.Sequential()
-        # for i,(num_convs,in_convs,out_convs) in enumerate(conv_arch):
-        #     self.net.add_module('vgg_block_'.format(i),vgg_block(num_convs,in_convs,out_convs))
-        self.net.add_module('vgg_block_1', vgg_block(2, 3, 64))
-        self.net.add_module('vgg_block_2', vgg_block(2, 64, 128))
-        self.net.add_module('vgg_block_3', vgg_block(3, 128, 256))
-        self.net.add_module('vgg_block_4', vgg_block(3, 256, 512))
-        self.net.add_module('vgg_block_5', vgg_block(3, 512, 512))
-        self.net.add_module('fc',nn.Sequential(
-            nn.Flatten(),
-            nn.Linear(vgg_fc[0],vgg_fc[1]),
+'''AlexNet有8层：5个卷积层，3个全连接层'''
+class AlexNet(nn.Module):
+    def __init__(self):
+        super(AlexNet,self).__init__()
+        self.conv = nn.Sequential(
+            # 输入图片大小为3*227*227,size为227*227，通道数为3，RGB型图片
+            nn.Conv2d(in_channels=3,out_channels=96,kernel_size=11,stride=4,padding=2), # 11 * 11 Conv(96),stride 4
+            # in_channels=3因为图片类型是RGB型，所以通道数是3
+            # out_channels=96表示输出的通道数，设定输出通道数的96（可以按自己需求调整）
+            # kernel_size=11:表示卷积核的大小是11x11的
+            # stride=4:表示的是步长为4
+            # padding=2:表示的是填充值的大小为2
+            # 输出大小是：N=（227-11+2*0)/4+1=55,卷积后尺寸是96*55*55
             nn.ReLU(),
-            nn.Dropout(0.2),
-            nn.Linear(vgg_fc[1],vgg_fc[1]),
+            nn.MaxPool2d(3,2),  # kernel_size=3,stride=2
+            # 输出大小为N=(55-3+2*0)/2+1=27,输出是27*27*96
+
+            # 输入大小是27*27*96
+            nn.Conv2d(96,256,3,1,1),
+            # N=(27-3+2*1)/1+1=27，卷积后尺寸是256*27*27
             nn.ReLU(),
-            nn.Dropout(0.2),
-            nn.Linear(vgg_fc[1],10),
-        ))
+            nn.MaxPool2d(3,2),
+            # N=(27-3+2*0)/2+1=13,输出大小是13*13*256
+
+            # 连续3个卷积层，计算方法以此类推
+            nn.Conv2d(256,384,3,1,1),
+            nn.ReLU(),
+            (nn.Conv2d(384,384,3,1,1)),
+            nn.ReLU(),
+            nn.Conv2d(384,256,3,1,1),
+            nn.ReLU(),
+            nn.MaxPool2d(3,2),
+        )
+        # 全连接层
+        self.fc = nn.Sequential(
+            nn.Linear(256*6*6,4096), # Dense(4096)
+            nn.ReLU(),
+            nn.Dropout(0.5),
+            nn.Linear(4096,4096),  # Dense(4096)
+            nn.ReLU(),
+            nn.Dropout(0.5),
+            nn.Linear(4096,1000)  # Dense(1000)
+        )
+    # 在forward()中，在输入全连接层之前，要先feature.view(img.shape[0],-1)做一次reshape
     def forward(self,img):
-        return self.net(img)
+        # assert img.shape[1]==3
+        feature = self.conv(img)
+        return self.fc(feature.view(img.shape[0],-1))
 
+
+# 构建网络
 if __name__ == '__main__':
-    conv_arch = ((2, 3, 64), (2, 64, 128), (3, 128, 256), (3, 256, 512), (3, 512, 512))
-    vgg_fc_featrues = 512 * 7 * 7
-    vgg_fc_hidden = 4096
-    vgg_fc = (vgg_fc_featrues, vgg_fc_hidden)
-
-    net = vgg(conv_arch,vgg_fc)
+    net = AlexNet()
+    # stat(net,(1,32,32))
     X = torch.rand(1, 3, 224, 224)
     print(net(X).shape)
