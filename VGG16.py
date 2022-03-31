@@ -20,21 +20,21 @@ class vgg(nn.Module):
     def __init__(self,conv_arch,vgg_fc):
         super(vgg,self).__init__()
         self.net = nn.Sequential()
-        for i,(num_convs,in_convs,out_convs) in enumerate(conv_arch):
-            self.net.add_module('vgg_block_'.format(i),vgg_block(num_convs,in_convs,out_convs))
-        # self.net.add_module('vgg_block_1', vgg_block(2, 3, 64))
-        # self.net.add_module('vgg_block_2', vgg_block(2, 64, 128))
-        # self.net.add_module('vgg_block_3', vgg_block(3, 128, 256))
-        # self.net.add_module('vgg_block_4', vgg_block(3, 256, 512))
-        # self.net.add_module('vgg_block_5', vgg_block(3, 512, 512))
+        # for i,(num_convs,in_convs,out_convs) in enumerate(conv_arch):
+        #     self.net.add_module('vgg_block_'.format(i),vgg_block(num_convs,in_convs,out_convs))
+        self.net.add_module('vgg_block_1', vgg_block(2, 3, 64))
+        self.net.add_module('vgg_block_2', vgg_block(2, 64, 128))
+        self.net.add_module('vgg_block_3', vgg_block(3, 128, 256))
+        self.net.add_module('vgg_block_4', vgg_block(3, 256, 512))
+        self.net.add_module('vgg_block_5', vgg_block(3, 512, 512))
         self.net.add_module('fc',nn.Sequential(
             nn.Flatten(),
             nn.Linear(vgg_fc[0],vgg_fc[1]),
             nn.ReLU(),
-            nn.Dropout(0.5),
+            nn.Dropout(0.2),
             nn.Linear(vgg_fc[1],vgg_fc[1]),
             nn.ReLU(),
-            nn.Dropout(0.5),
+            nn.Dropout(0.2),
             nn.Linear(vgg_fc[1],10),
         ))
     def forward(self,img):
