@@ -25,7 +25,7 @@ class vgg(nn.Module):
         self.net = nn.Sequential()
         # 卷积层部分
         # for i,(num_convs,in_convs,out_convs) in enumerate(conv_arch):
-        #     self.net.add_module('vgg_block_'.format(i),vgg_block(num_convs,in_convs,out_convs))
+        #     self.net.add_module('vgg_block_{}'.format(i),vgg_block(num_convs,in_convs,out_convs))
         self.net.add_module('vgg_block_1', vgg_block(2, 3, 64))
         self.net.add_module('vgg_block_2', vgg_block(2, 64, 128))
         self.net.add_module('vgg_block_3', vgg_block(3, 128, 256))
