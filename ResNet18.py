@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 from torch.hub import load_state_dict_from_url # 直接引入pytorch中已经训练好的预训练权重值
+import torchvision
 
 model_urls = {
     'resnet18': 'https://download.pytorch.org/models/resnet18-5c106cde.pth',
@@ -106,21 +107,21 @@ class ResNet(nn.Module):
             bloacks (int): 当前Stage中的残差块的数目
             stride (int): 残差块中第一个卷积层的步长
         """
+
         norm_layer = self._norm_layer
         downsample = None
 
         if stride != 1 or self.inplanes != planes * block.expansion:  # 判断是否需要下采样(stride!=1就说明发生了下采样)
             downsample = nn.Sequential( # 生成downsample
-                nn.Conv2d(self.inplanes, planes * block.expansion,
-                          kernel_size=1, stride=stride, bias=False),  # 1 * 1卷积调整维度
-                nn.BatchNorm2d(planes * block.expansion),
+                nn.conv1x1(self.inplanes, planes * block.expansion,stride),
+                          norm_layer(planes*block.expansion)  # 1 * 1卷积调整维度
             )
 
         layers = []
-        layers.append(block(self.inplanes, planes, stride, downsample)) # 第一个block单独处理
-        self.inplanes = planes * block.expansion # 记录layerN的channel变化
+        layers.append(block(self.inplanes, planes, stride, downsample,norm_layer))  # 第一个block单独处理
+        self.inplanes = planes * self.expansion # 记录layerN的channel变化
         for i in range(1, blocks): # 从1开始循环，生成每一个层，第一个模块前面单独处理过了
-            layers.append(block(self.inplanes, planes))
+            layers.append(block(self.inplanes, planes,norm_layer = norm_layer))
 
         return nn.Sequential(*layers) # 使用Sequential层组合blocks,形成stage
 
@@ -156,7 +157,6 @@ def resnet18(pretrained=False, progress=True,**kwargs):
 
 if __name__ == '__main__':
     x = torch.rand(1,3,224,224)
-    model = resnet18()
+    model = torchvision.models.resnet18()
     y = model(x)
     print(y.shape)
-
