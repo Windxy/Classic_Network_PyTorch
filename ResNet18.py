@@ -19,6 +19,7 @@ def conv1x1(in_planes, out_planes, stride=1, padding=1):
 class BasicBlock(nn.Module): #输出channel和输入chnnel都是64
     # BasicBlock类有一个类属性，BasicBlock.expansion这个类属性的值为1，另外在 Bottleneck类中也有这个类属性，值为4
         expansion = 1
+
         def __init__(self, inplanes, planes, stride=1, downsample=None,norm_layer=None):
             """定义BasicBlock残差块类
 
@@ -49,7 +50,7 @@ class BasicBlock(nn.Module): #输出channel和输入chnnel都是64
 
             x = self.conv1(x)
             x = self.bn1(x)
-            x = self.ReLU1(x)
+            x = self.relu(x)
 
             x = self.conv2(x)
             x = self.bn2(x)
@@ -76,6 +77,9 @@ class ResNet(nn.Module):
             norm_layer = nn.BatchNorm2d
 
         super(ResNet, self).__init__()
+
+        self._norm_layer = norm_layer
+
         self.inplanes = 64  # 第一个残差块的输入通道数
         self.conv1 = nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=3,bias=False) #  7 * 7,64,stride=2
         self.bn1 = norm_layer(self.inplanes)
@@ -88,7 +92,7 @@ class ResNet(nn.Module):
         self.layer3 = self._make_layer(block, 256, layers[2], stride=2)  # [3 * 3 , 256]
         self.layer4 = self._make_layer(block, 512, layers[3], stride=2)  # [3 * 3 , 512]
 
-        self.avgpool = nn.AdaptiveAvgPool1d((1,1))
+        self.avgpool = nn.AdaptiveAvgPool2d((1,1))
         self.fc = nn.Linear(512 * block.expansion, num_classes)
 
         # 网络参数初始化
@@ -113,13 +117,13 @@ class ResNet(nn.Module):
 
         if stride != 1 or self.inplanes != planes * block.expansion:  # 判断是否需要下采样(stride!=1就说明发生了下采样)
             downsample = nn.Sequential( # 生成downsample
-                nn.conv1x1(self.inplanes, planes * block.expansion,stride),
+                conv1x1(self.inplanes, planes * block.expansion,stride),
                           norm_layer(planes*block.expansion)  # 1 * 1卷积调整维度
             )
 
         layers = []
         layers.append(block(self.inplanes, planes, stride, downsample,norm_layer))  # 第一个block单独处理
-        self.inplanes = planes * self.expansion # 记录layerN的channel变化
+        self.inplanes = planes * block.expansion # 记录layerN的channel变化
         for i in range(1, blocks): # 从1开始循环，生成每一个层，第一个模块前面单独处理过了
             layers.append(block(self.inplanes, planes,norm_layer = norm_layer))
 
@@ -157,6 +161,6 @@ def resnet18(pretrained=False, progress=True,**kwargs):
 
 if __name__ == '__main__':
     x = torch.rand(1,3,224,224)
-    model = torchvision.models.resnet18()
+    model = resnet18()
     y = model(x)
     print(y.shape)
