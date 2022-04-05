@@ -154,3 +154,9 @@ def resnet18(pretrained=False, progress=True,**kwargs):
     # pretrained (bool): 若为True则返回在ImageNet上预训练的模型
     return _resnet('resnet18',BasicBlock,[2,2,2,2],pretrained,progress,**kwargs)
 
+if __name__ == '__main__':
+    x = torch.rand(1,3,224,224)
+    model = resnet18()
+    y = model(x)
+    print(y.shape)
+
