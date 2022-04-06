@@ -1,7 +1,7 @@
 # Classic_Network_PyTorch
 Using PyTorch to Rebuild Classic Deep Learning Network
 
-用PyTorch重建经典的深度学习网络
+用PyTorch重建经典的深度学习网络（注释版）
 
 
 
