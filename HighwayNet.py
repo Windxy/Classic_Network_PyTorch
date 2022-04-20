@@ -5,13 +5,16 @@ from torch import nn
 import torch.nn.functional as F
 
 class Highway(nn.Module):
+    """
+    y = f(x)的一层非线性变换，具体公式为y = T(x, Wt) * x + (1 - T(x, Wt)) * H(x, Wh)
+    """
     def __init__(self, input_size, num_layers, f):
         super(Highway, self).__init__()
         size = input_size
-        self.num_layers = num_layers
+        self.num_layers = num_layers # 设置highway的层数
         self.nonlinear = nn.ModuleList([nn.Linear(size, size) for _ in range(num_layers)])
         self.linear = nn.ModuleList([nn.Linear(size, size) for _ in range(num_layers)])
-        self.gate = nn.ModuleList([nn.Linear(size, size) for _ in range(num_layers)])
+        self.gate = nn.ModuleList([nn.Linear(size, size) for _ in range(num_layers)]) #
         self.f = f
 
     def forward(self, x):
@@ -23,9 +26,13 @@ class Highway(nn.Module):
             and ⨀ is element-wise multiplication
             """
         for layer in range(self.num_layers):
-            gate = torch.sigmoid(self.gate[layer](x))   # F.sigmoid 淘汰
+            # T(x, Wt)
+            gate = torch.sigmoid(self.gate[layer](x)) # F.sigmoid 淘汰
+            # H(x,Wh)
             nonlinear = self.f(self.nonlinear[layer](x))
+            # (x,wh)
             linear = self.linear[layer](x)
+            # T(x, Wt) * x + (1 - T(x, Wt)) * H(x, Wh)
             x = gate * nonlinear + (1 - gate) * linear
         return x
 
