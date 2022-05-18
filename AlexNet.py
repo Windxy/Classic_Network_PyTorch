@@ -29,7 +29,7 @@ class AlexNet(nn.Module):
             # 连续3个卷积层，计算方法以此类推
             nn.Conv2d(256,384,3,1,1),
             nn.ReLU(),
-            (nn.Conv2d(384,384,3,1,1)),
+            nn.Conv2d(384,384,3,1,1),
             nn.ReLU(),
             nn.Conv2d(384,256,3,1,1),
             nn.ReLU(),
