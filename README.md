@@ -2,7 +2,8 @@
 Using PyTorch to Rebuild Classic Deep Learning Network
 
 用PyTorch重建经典的深度学习网络（注释版）
-
+### 环境 requirement
+pytorch == 1.2.0+
 
 
 | 名称 | 时间 | 亮点 | paper链接 | code链接 |
