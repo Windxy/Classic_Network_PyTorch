@@ -36,7 +36,7 @@ class LeNet(nn.Module):
     # 在forward()中，在输入全连接层之前，要先feature.view(img.shape[0],-1)做一次reshape
     def forward(self,x):
         feature = self.conv(x)
-        out = self.fc(feature.view(x.shape[0],-1))    # 4张图片一批，img.shape[0]为4，第二个就是对应的概率
+        out = self.fc(feature.view(x.shape[0],-1))    # batch*16*5*5 转换为 batch*400维度
         return out
 
 # 构建网络
