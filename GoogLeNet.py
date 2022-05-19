@@ -34,8 +34,8 @@ class GoogLeNet(nn.Module):
         self.inception5b = Inception(832,384,192,384,48,128,128)
 
         if aux_logits:
-            self.aux1 = Inception(512,num_classes)
-            self.aux2 = Inception(528,num_classes)
+            self.aux1 = InceptionAux(512,num_classes)
+            self.aux2 = InceptionAux(528,num_classes)
 
         self.avgpool1 = nn.AdaptiveAvgPool2d((1,1))#自适应平均池化，保证输出为1*1
         self.dropout = nn.Dropout(0.7)
