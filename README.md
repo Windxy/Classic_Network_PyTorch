@@ -26,5 +26,5 @@ pytorch == 1.2.0+
 | ShuffleNet |  | 待完成 || |
 | ResNeXt |  | 待完成 || |
 | Xception |  | 待完成 || |
-| CBAM(Convolutional Block Attention Module) |  | 待完成 || |
+| CBAM(Convolutional Block Attention Module) | 2018 | 1.CBAM表示卷积模块的注意力机制模块，是一种**融合通道和空间注意力的注意力模块**，沿着空间和通道两个维度依次推断出注意力权重，再与原图相乘来对特征进行自适应调整<br />2.在SENet或ECANet的基础上，**在通道注意力模块后，接入空间注意力模块**，实现了通道注意力和空间注意力的双机制<br />3.**注意力模块不再采用单一的最大池化或平均池化，而是采用最大池化和平均池化的相加或堆叠**。通道注意力模块采用相加，空间注意力模块采用堆叠方式。 | [paper-CBAM](https://arxiv.org/pdf/1807.06521.pdf) | [code-CBAM](https://github.com/Windxy/Classic_Network_PyTorch/blob/main/CBAM.py)  |
 
