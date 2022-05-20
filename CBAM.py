@@ -21,12 +21,12 @@ class ChannelAttention(nn.Module):
         # 相加后再取sigmoid，此时获得了输入特征层每个通道的权值（0-1之间）
         self.sigmoid = nn.Sigmoid()
 
-        #前传部分，out * x放到最后
-        def forward(self,x):
-            avg_out = self.fc2(self.relu1(self.fc1(self.avg_pool(x))))
-            max_out = self.fc2(self.relu1(self.fc1(self.max_pool(x))))
-            out = avg_out + max_out
-            return self.sigmoid(out)
+    #前传部分，out * x放到最后
+    def forward(self,x):
+        avg_out = self.fc2(self.relu1(self.fc1(self.avg_pool(x))))
+        max_out = self.fc2(self.relu1(self.fc1(self.max_pool(x))))
+        out = avg_out + max_out
+        return self.sigmoid(out)
 
 
 
@@ -45,20 +45,20 @@ class SpatialAttention(nn.Module):
         self.conv1 = nn.Conv2d(2,1,kernel_size,padding=padding,bias=False)
         self.sigmoid = nn.Sigmoid()
 
-        # 前传部分，out * x放在最后
-        def forward(self,x):
-            # 在通道上进行最大池化和平均池化
-            # 对于pytorch，其通道在第一维度，在batch_size之后，dim=1
-            # 保留通道，所以keepdim=true
-            avg_out = torch.mean(x,dim=1,keepdim=True) # keepdim：是否需要保持输出的维度与输入一样
-            max_out,_=torch.max(x,dim=1,keepdim=True)
+    # 前传部分，out * x放在最后
+    def forward(self,x):
+        # 在通道上进行最大池化和平均池化
+        # 对于pytorch，其通道在第一维度，在batch_size之后，dim=1
+        # 保留通道，所以keepdim=true
+        avg_out = torch.mean(x,dim=1,keepdim=True) # keepdim：是否需要保持输出的维度与输入一样
+        max_out,_=torch.max(x,dim=1,keepdim=True)
 
-            # 将最大值和平均值进行堆叠
-            x = torch.cat([avg_out,max_out],dim=1)
+        # 将最大值和平均值进行堆叠
+        x = torch.cat([avg_out,max_out],dim=1)
 
-            # 取卷积
-            x = self.conv1(x)
-            return self.sigmoid(x)
+        # 取卷积
+        x = self.conv1(x)
+        return self.sigmoid(x)
 
 
 # 结合空间和通道注意力机制
@@ -76,4 +76,4 @@ if __name__ == '__main__':
     x = torch.rand(50,512,7,7)
     model = cbam_block(512)
     output = model(x)
-    print(output)
+    print(output.shape)
