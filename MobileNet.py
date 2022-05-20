@@ -3,7 +3,7 @@ import torch.nn as nn
 
 # 论文https://arxiv.org/abs/1704.04861
 
-# 标准卷积块，Conv + BN + ReLU
+# 标准卷积块，Conv + BN + ReLU6
 class ConvBlock(nn.Module):
     def __init__(self,inchannel,outchannel,k=3,s=1,group=1):
         super(ConvBlock, self).__init__()
@@ -15,7 +15,7 @@ class ConvBlock(nn.Module):
                               groups=group,     # 设置为1，则为标准卷积，设置与输入通道数相同，则为depthwise卷积
                             )
         self.BN = nn.BatchNorm2d(outchannel)
-        self.act = nn.ReLU()
+        self.act = nn.ReLU6()
 
     def forward(self,x):
         y = self.Conv(x)
