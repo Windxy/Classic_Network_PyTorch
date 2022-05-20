@@ -11,8 +11,8 @@ class ConvBlock(nn.Module):
                               out_channels=outchannel,
                               kernel_size = k,
                               stride = s,
-                              padding=(k-1)//2, # 保证输出的尺寸与原尺寸一致
-                              groups=group,     # 设置为1，则为标准卷积，设置与输入通道数相同，则为depthwise卷积
+                              padding = (k-1) // 2, # 保证输出的尺寸与原尺寸一致
+                              groups = group,     # 设置为1，则为标准卷积，设置与输入通道数相同，则为depthwise卷积
                             )
         self.BN = nn.BatchNorm2d(outchannel)
         self.act = nn.ReLU6()
