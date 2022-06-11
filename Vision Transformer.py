@@ -29,6 +29,7 @@ class FeedForward(nn.Module):
 
 # self-attention
 class Attention(nn.Module):
+    # 自注意力的实现，核心在于qkv后一个softmax+dropout
     def __init__(self, dim, heads = 8, dim_head = 64, dropout = 0.):
         super().__init__()
         inner_dim = dim_head *  heads
@@ -75,6 +76,7 @@ class Transformer(nn.Module):
     def __init__(self, dim, depth, heads, dim_head, mlp_dim, dropout = 0.):
         super().__init__()
         self.layers = nn.ModuleList([])
+        # 原版的ViT的深度（depth）为6，也就是自注意力和前向网络（mlp）重复6次，
         for _ in range(depth):
             self.layers.append(nn.ModuleList([
                 PreNorm(dim, Attention(dim, heads = heads, dim_head = dim_head, dropout = dropout)),
