@@ -6,6 +6,8 @@ Using PyTorch to Rebuild Classic Deep Learning Network
 pytorch == 1.2.0+
 
 
+
+
 | 名称 | 时间 | 亮点 | paper链接 | code链接 |
 | ------ | ---- | --------- | ---------- | --------- |
 | LeNet  | 1998 | 1.**最早提出**的的卷积神经网络模型，应用于手写数字分类任务<br />2.解释了CNN网络的**主要部件**包括，输入层+卷积层+池化层+全连接层+输出层<br />3.总结CNN**三大特性核心思想**：局部感受野(local receptive fields)、权值共享(shared weights)、下采样(sub-sampling)<br />4.稀疏连接矩阵避免了巨大的计算开销 | [paper-LeNet](https://ieeexplore.ieee.org/document/726791) | [code-LeNet](https://github.com/Windxy/Classic_Network_PyTorch/blob/main/LeNet.py) |
@@ -19,7 +21,7 @@ pytorch == 1.2.0+
 | Inception-V3 | 2015 | 1.对于GoogLeNet网络中提出的**inception结构（inceptionV1）** 进行改进<br />2.InceptionV2:用两个 3 x 3 的卷积代替 5×5的大卷积。使用**BN (BatchNormalization ）方法**。<br />3.InceptionV3:提出了更多种卷积分解的方法，**把大卷积因式分解为小卷积和非对称卷积**。<br /> 4.引入Label Smoothing，提升模型性能|[paper-InceptionV3](http://cn.arxiv.org/pdf/1512.00567v3)|[code-InceptionV3](https://github.com/Windxy/Classic_Network_PyTorch/blob/main/InceptionV3.py) |
 | Inception-V4 | 2016 | 1.整个结构所使用模块和InceptionV3基本一致<br />2.初始的InceptionV3:3个InceptionA+5个InceptionB+3个InceptionC<br />3.InceptionV4:经过4个InceptionA+1个ReductionA+7个InceptionB+1个ReductionB+3个InceptionC<br />4.在InceptionV3原始结构的基础上**增加了ReductionA和ReductionB模块**，这些**缩减块的加入是为了改变特征图的宽度和高度**，ReductionA：尺寸从35×35缩减到17×17;ReductionB尺寸从17×17缩减到8×8。早期的版本并没有明确使用缩减块，但也实现了其功能。<br />|[paper-InceptionV4](https://arxiv.org/pdf/1602.07261.pdf)|[code-InceptionV4](https://github.com/Windxy/Classic_Network_PyTorch/blob/main/InceptionV4.py) |
 | SqueezeNet | 2016 | 1.主要目的是为了在达到当前主流网络的识别精度的基础上**降低CNN模型的参数数量，简化网络复杂度**<br />2.SqueezeNet在保持和 AlexNet同样的准确度上，参数比它少50倍<br />3.使用**三个策略**达到目标：1、大量使用1x1卷积核替换3x3卷积核，因为参数可以降低9倍；2、减少3x3卷积核的输入通道数（input channels），因为卷积核参数为：(number of input channels) * (number of filters) * 3 * 3；3、延迟下采样，可以给卷积层提供更大的激活图：更大的激活图保留了更多的信息，可以提供更高的分类准确率。1和2可以显著减少参数数量，3可以在参数数量受限的情况下提高准确率<br />4.定义了自己的**卷积模块Fire Module**，分为squeeze层和expand层，squeeze层只使用1×1卷积（策略1），还可以限制输入通道数量（策略3）<br />|[paper-SqueezeNet](https://arxiv.org/pdf/1602.07360.pdf)|[code-SqueezeNet](https://github.com/Windxy/Classic_Network_PyTorch/blob/main/SqueezeNet.py) |
-| SE-Net(Squeeze and Excitation Network) | 2017 | 1.研究了通道关系，通过引入一个新的架构单元**SE block**，来对卷积特征的通道之间的相互依赖关系进行建模，以提高网络的表示能力。将SE模块进行堆叠，构建SENet架构。<br />2.操作分为两步，第一步是Squeeze,第二步是Exciation。前者对应一个全局平均池化操作，将c×h×w压缩成c×1×1，得到全局信息；后者进行两次全连接，最终得到权重矩阵<br /> |[paper-SENet](https://arxiv.org/abs/1709.01507)|[code-SENet](https://github.com/Windxy/Classic_Network_PyTorch/blob/main/SENet.py) |
+| SE-Net(Squeeze and Excitation Network) | 2017 | 1.引入了**注意力Squeeze-and-Excitation(SE)模块**<br />2.由于SE模块简单有效，因此可以**很容易的和其他模型耦合**，和ResNet耦合变成SE-ResNet，和Inception-V3耦合变成SE-Inception-V3等 |[paper-SENet](https://arxiv.org/abs/1709.01507)|[code-SENet](https://github.com/Windxy/Classic_Network_PyTorch/blob/main/SENet.py) |
 | MobileNetv1 | 2017 | 1.提出**深度可分离卷积**，即DepthWise+PointWise两种卷积方式，在性能没有急剧降低的情况下，大大降低了网络参数量<br />2.引用**ReLU6**作为激活函数，在低精度计算下能够保持更强的鲁棒性 |[paper-Mobilenet](https://arxiv.org/pdf/1704.04861.pdf)| [code-MobileNetv1](https://github.com/Windxy/Classic_Network_PyTorch/blob/main/MobileNet.py) |
 | MobileNetv2 | 2018 | 1.提出**反向残差块**(Inverted residual block)，提高了内存使用的效率 |[paper-Mobilenetv2](https://arxiv.org/abs/1801.04381)| |
 | MobileNetv3 |  | 待完成 || |
@@ -27,4 +29,6 @@ pytorch == 1.2.0+
 | ResNeXt |  | 待完成 || |
 | Xception |  | 待完成 || |
 | CBAM(Convolutional Block Attention Module) | 2018 | 1.CBAM表示卷积模块的注意力机制模块，是一种**融合通道和空间注意力的注意力模块**，沿着空间和通道两个维度依次推断出注意力权重，再与原图相乘来对特征进行自适应调整<br />2.在SENet或ECANet的基础上，**在通道注意力模块后，接入空间注意力模块**，实现了通道注意力和空间注意力的双机制<br />3.**注意力模块不再采用单一的最大池化或平均池化，而是采用最大池化和平均池化的相加或堆叠**。通道注意力模块采用相加，空间注意力模块采用堆叠方式。 | [paper-CBAM](https://arxiv.org/pdf/1807.06521.pdf) | [code-CBAM](https://github.com/Windxy/Classic_Network_PyTorch/blob/main/CBAM.py)  |
+
+
 
