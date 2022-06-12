@@ -14,7 +14,8 @@ def nin_block(in_channel,out_channel,k,s,p):
         nn.ReLU()
     )
 
-# 全局平均池化层代替全连接层
+# 全局平均池化层代替全连接层,
+# F.avg_pool2d
 class GlobalAvgPool(nn.Module):
     def __init__(self):
         super(GlobalAvgPool, self).__init__()
