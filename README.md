@@ -5,7 +5,7 @@ Using PyTorch to Rebuild Classic Deep Learning Network
 ### 环境 requirement
 pytorch == 1.2.0+
 
-
+### 介绍 Introduction
 
 
 | 名称 | 时间 | 亮点 | paper链接 | code链接 |
@@ -23,12 +23,15 @@ pytorch == 1.2.0+
 | SqueezeNet | 2016 | 1.主要目的是为了在达到当前主流网络的识别精度的基础上**降低CNN模型的参数数量，简化网络复杂度**<br />2.SqueezeNet在保持和 AlexNet同样的准确度上，参数比它少50倍<br />3.使用**三个策略**达到目标：1、大量使用1x1卷积核替换3x3卷积核，因为参数可以降低9倍；2、减少3x3卷积核的输入通道数（input channels），因为卷积核参数为：(number of input channels) * (number of filters) * 3 * 3；3、延迟下采样，可以给卷积层提供更大的激活图：更大的激活图保留了更多的信息，可以提供更高的分类准确率。1和2可以显著减少参数数量，3可以在参数数量受限的情况下提高准确率<br />4.定义了自己的**卷积模块Fire Module**，分为squeeze层和expand层，squeeze层只使用1×1卷积（策略1），还可以限制输入通道数量（策略3）<br />|[paper-SqueezeNet](https://arxiv.org/pdf/1602.07360.pdf)|[code-SqueezeNet](https://github.com/Windxy/Classic_Network_PyTorch/blob/main/SqueezeNet.py) |
 | SE-Net(Squeeze and Excitation Network) | 2017 | 1.引入了**注意力Squeeze-and-Excitation(SE)模块**<br />2.由于SE模块简单有效，因此可以**很容易的和其他模型耦合**，和ResNet耦合变成SE-ResNet，和Inception-V3耦合变成SE-Inception-V3等 |[paper-SENet](https://arxiv.org/abs/1709.01507)|[code-SENet](https://github.com/Windxy/Classic_Network_PyTorch/blob/main/SENet.py) |
 | MobileNetv1 | 2017 | 1.提出**深度可分离卷积**，即DepthWise+PointWise两种卷积方式，在性能没有急剧降低的情况下，大大降低了网络参数量<br />2.引用**ReLU6**作为激活函数，在低精度计算下能够保持更强的鲁棒性 |[paper-Mobilenet](https://arxiv.org/pdf/1704.04861.pdf)| [code-MobileNetv1](https://github.com/Windxy/Classic_Network_PyTorch/blob/main/MobileNet.py) |
-| MobileNetv2 | 2018 | 1.提出**反向残差块**(Inverted residual block)，提高了内存使用的效率 |[paper-Mobilenetv2](https://arxiv.org/abs/1801.04381)| |
+| MobileNetv2 | 2018 | 1.提出**反向残差块**(Inverted residual block)，提高了内存使用的效率 |[paper-Mobilenetv2](https://arxiv.org/abs/1801.04381)|[code-Mobilenetv2](https://github.com/Windxy/Classic_Network_PyTorch/blob/main/MobileNetv2.py) |
 | MobileNetv3 |  | 待完成 || |
 | ShuffleNet |  | 待完成 || |
 | ResNeXt |  | 待完成 || |
 | Xception |  | 待完成 || |
 | CBAM(Convolutional Block Attention Module) | 2018 | 1.CBAM表示卷积模块的注意力机制模块，是一种**融合通道和空间注意力的注意力模块**，沿着空间和通道两个维度依次推断出注意力权重，再与原图相乘来对特征进行自适应调整<br />2.在SENet或ECANet的基础上，**在通道注意力模块后，接入空间注意力模块**，实现了通道注意力和空间注意力的双机制<br />3.**注意力模块不再采用单一的最大池化或平均池化，而是采用最大池化和平均池化的相加或堆叠**。通道注意力模块采用相加，空间注意力模块采用堆叠方式。 | [paper-CBAM](https://arxiv.org/pdf/1807.06521.pdf) | [code-CBAM](https://github.com/Windxy/Classic_Network_PyTorch/blob/main/CBAM.py)  |
+| self-attention |  |  |  |  |
+
+
 
 
 
