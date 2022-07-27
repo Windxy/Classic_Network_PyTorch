@@ -30,6 +30,7 @@ pytorch == 1.2.0+
 | Xception | 2017 | 待完成 |[paper-Xception](https://ieeexplore.ieee.org/document/8099678)| [code-Xception](https://github.com/Windxy/Classic_Network_PyTorch/blob/main/XCeption.py) |
 | CBAM(Convolutional Block Attention Module) | 2018 | 1.CBAM表示卷积模块的注意力机制模块，是一种**融合通道和空间注意力的注意力模块**，沿着空间和通道两个维度依次推断出注意力权重，再与原图相乘来对特征进行自适应调整<br />2.在SENet或ECANet的基础上，**在通道注意力模块后，接入空间注意力模块**，实现了通道注意力和空间注意力的双机制<br />3.**注意力模块不再采用单一的最大池化或平均池化，而是采用最大池化和平均池化的相加或堆叠**。通道注意力模块采用相加，空间注意力模块采用堆叠方式。 | [paper-CBAM](https://arxiv.org/pdf/1807.06521.pdf) | [code-CBAM](https://github.com/Windxy/Classic_Network_PyTorch/blob/main/CBAM.py)  |
 | self-attention |  |  |  |  |
+| Vision Transformer | 2020 | 1.首次将NLP中的Transformer架构引入到图像中<br/>2.第一步将图像分为多个patch<br/>3.第二步引入cls_token嵌入向量，代表分类类别，和position encoding位置编码，以确定每个表征向量的位置<br/>4.第三步送入transformer，该结构由encoder-decoder架构构成，分别都由6个自注意力和前馈神经网络构成<br/>5.最后再送入一个前馈神经网络头中。 | [paper-ViT](https://arxiv.org/abs/2010.11929) | [code-ViT](https://github.com/Windxy/Classic_Network_PyTorch/blob/main/Vision%20Transformer.py) |
 
 
 
