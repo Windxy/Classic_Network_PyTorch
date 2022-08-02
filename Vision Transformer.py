@@ -160,6 +160,7 @@ class ViT(nn.Module):
 
 if __name__ == '__main__':
     x = torch.rand(2,3,256,256)
+    '''自定义模型'''
     model = ViT(image_size = 256,
                 patch_size = 32,
                 num_classes = 10,
