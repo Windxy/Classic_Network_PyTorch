@@ -1,3 +1,4 @@
+# ViT: Vision Transformer
 import torch
 from torch import nn
 
@@ -171,4 +172,4 @@ if __name__ == '__main__':
                 pool = 'cls', channels = 3, dim_head = 64,
                 dropout = 0.1, emb_dropout = 0.1)
     y = model(x)
-    print(y)
+    print(y.shape)

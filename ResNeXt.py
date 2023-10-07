@@ -44,7 +44,7 @@ class ResNeXtBottleneck(nn.Module):
 
 
 class CifarResNeXt(nn.Module):
-    def __init__(self, cardinality, depth, nlabels, base_width, widen_factor=4):
+    def __init__(self, cardinality, depth, nlabels, base_width, widen_factor=3):
         """ Constructor
 
         Args:
@@ -103,7 +103,7 @@ class CifarResNeXt(nn.Module):
         return self.classifier(x)
 
 if __name__ == '__main__':
-    x = torch.rand(1,3,224,224)
-    model = CifarResNeXt(cardinality=1,depth=4,nlabels=10,base_width=4)
+    x = torch.rand(1,3,32,32)
+    model = CifarResNeXt(cardinality=8,depth=29,nlabels=10,base_width=64, widen_factor=3)
     y = model(x)
     print(y.shape)

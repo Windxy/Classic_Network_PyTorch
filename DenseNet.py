@@ -53,7 +53,7 @@ def transition_block(in_channel,out_channel):
 
 # DenseNet模型
 class DenseNet(nn.Module):
-    def __init__(self):
+    def __init__(self,num_classes=1000):
         super(DenseNet, self).__init__()
         net = nn.Sequential(
             nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=3), # 7*7 conv,stride 2
@@ -81,7 +81,7 @@ class DenseNet(nn.Module):
         net.add_module("BN", nn.BatchNorm2d(num_channels))
         net.add_module("relu", nn.ReLU())
         net.add_module("global_avg_pool", GlobalAvgPool())  # 利用全局平均池化层可以降低模型的参数数量来最小化过拟合效应
-        net.add_module("fc", nn.Sequential(nn.Flatten(), nn.Linear(num_channels, 10)))
+        net.add_module("fc", nn.Sequential(nn.Flatten(), nn.Linear(num_channels, num_classes)))
         self.net = net
 
     def forward(self,x):
@@ -90,5 +90,7 @@ class DenseNet(nn.Module):
 def DenseNet_T():
     net = DenseNet()
     X = torch.rand(1, 3, 224, 224)
-    print(net(X))
-DenseNet_T()
+    print(net(X).shape)
+
+if __name__ == '__main__':
+    DenseNet_T()

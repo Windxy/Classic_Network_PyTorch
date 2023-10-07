@@ -42,4 +42,4 @@ if __name__ == '__main__':
     x = torch.rand(1,96,112,112)
     model = se_block(96)
     output = model(x)
-    print(output)
+    print(output.shape)
